@@ -97,23 +97,36 @@
         });
 
         async function getPhi() {
-            const song = document.getElementById('songInput').value;
-            const artist = document.getElementById('artistInput').value;
-            if (!song) return;
-            document.getElementById('phi-loader').style.display = 'block';
-            document.getElementById('result').style.display = 'none';
-            try {
-                const res = await fetch(`/api/calculate?song=${encodeURIComponent(song + ' ' + artist)}`);
-                const data = await res.json();
-                document.getElementById('phi-loader').style.display = 'none';
-                if (data.error) return alert(data.error);
-                document.getElementById('result').style.display = 'block';
-                document.getElementById('timestamp').innerText = data.phiMoment;
-                document.getElementById('guideTime').innerText = data.phiMoment;
-                document.getElementById('trackInfo').innerText = `${data.name} — ${data.artist}`;
-                document.getElementById('playerContainer').innerHTML = `<iframe src="https://open.spotify.com/embed/track/${data.trackId}" width="100%" height="80" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" style="border-radius:12px; margin-top:10px; border: none;"></iframe>`;
-            } catch (e) { document.getElementById('phi-loader').style.display = 'none'; alert("Connection error."); }
-        }
+    const song = document.getElementById('songInput').value;
+    const artist = document.getElementById('artistInput').value;
+    if (!song) return;
+
+    document.getElementById('phi-loader').style.display = 'block';
+    document.getElementById('result').style.display = 'none';
+
+    try {
+        const res = await fetch(`/api/calculate?song=${encodeURIComponent(song + ' ' + artist)}`);
+        const data = await res.json();
+        
+        document.getElementById('phi-loader').style.display = 'none';
+        if (data.error) return alert(data.error);
+
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('timestamp').innerText = data.phiMoment;
+        document.getElementById('guideTime').innerText = data.phiMoment;
+        document.getElementById('trackInfo').innerText = `${data.name} — ${data.artist}`;
+        
+        // Updated: Increased height to 352 for a more immersive "App" feel
+        document.getElementById('playerContainer').innerHTML = `
+            <iframe src="https://open.spotify.com/embed/track/${data.trackId}" 
+                    width="100%" height="352" frameborder="0" 
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                    style="border-radius:12px; margin-top:20px; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.5);"></iframe>`;
+    } catch (e) {
+        document.getElementById('phi-loader').style.display = 'none';
+        alert("Connection error.");
+    }
+}
     </script>
 </body>
 </html>
