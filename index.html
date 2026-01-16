@@ -13,8 +13,9 @@
         [data-theme="light"] { --bg: #f4f4f4; --text: #1a1a1a; --gold: #b8860b; --card: #ffffff; --border: #ddd; }
 
         body { background-color: var(--bg); color: var(--text); font-family: 'Helvetica Neue', Arial, sans-serif; text-align: center; margin: 0; transition: 0.3s; padding-top: 40px; }
-        .container { max-width: 500px; margin: 0 auto; padding: 20px; }
-        .gold { color: var(--gold); }
+        
+        /* DIAGNOSTIC BORDER - Remove this later if it works! */
+        .container { max-width: 500px; margin: 0 auto; padding: 20px; border: 2px solid red; } 
 
         .brand { letter-spacing: 8px; font-weight: 200; font-size: 3rem; margin-bottom: 0; color: var(--gold); }
         .subtitle { color: #666; font-size: 0.9rem; margin-bottom: 40px; }
@@ -101,8 +102,7 @@
         <footer class="math-info">
             <h3>The Science of the Peak</h3>
             <p>The <strong>Golden Ratio</strong> (represented by the symbol <strong>Phi or Φ</strong>) is a unique mathematical proportion found in nature and art. It happens when you divide a line into two parts so that the longer part is roughly <strong>1.6 times</strong> the length of the shorter part.</p>
-            
-            <p>When applied to a linear timeline, the <strong>"Golden Section"</strong> occurs at the <strong>61.8% mark</strong>. In musicology, this point often aligns with the structural climax or a significant thematic shift.</p>
+                        <p>When applied to a linear timeline, the <strong>"Golden Section"</strong> occurs at the <strong>61.8% mark</strong>. In musicology, this point often aligns with the structural climax or a significant thematic shift.</p>
             <p class="formula">$$T_{peak} = T_{total} \times 0.618$$</p>
             <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
             <p class="credits">
