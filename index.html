@@ -4,9 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PhiPoint | The Geometry of Song</title>
-    <link rel="stylesheet" href="style.css">
+    
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root { --bg: #0A0A0A; --text: #f0f0f0; --gold: #D4AF37; --card: #111; --border: #333; }
+        [data-theme="light"] { --bg: #f4f4f4; --text: #1a1a1a; --gold: #b8860b; --card: #ffffff; --border: #ddd; }
+
+        body { background-color: var(--bg); color: var(--text); font-family: 'Helvetica Neue', Arial, sans-serif; text-align: center; margin: 0; transition: 0.3s; padding-top: 40px; }
+        .container { max-width: 500px; margin: 0 auto; padding: 20px; }
+        .gold { color: var(--gold); }
+
+        .brand { letter-spacing: 8px; font-weight: 200; font-size: 3rem; margin-bottom: 0; color: var(--gold); }
+        .subtitle { color: #666; font-size: 0.9rem; margin-bottom: 40px; }
+
+        .header-tools { position: absolute; top: 20px; right: 20px; }
+        .theme-switch { cursor: pointer; background: none; color: inherit; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; border: 1px solid var(--border); padding: 5px 10px; border-radius: 20px; }
+
+        .input-wrap { margin-bottom: 20px; text-align: left; width: 90%; margin: 0 auto 20px; }
+        label { display: block; font-size: 0.6rem; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        input { background: none; border: none; border-bottom: 2px solid var(--gold); color: var(--text); font-size: 1.1rem; padding: 10px 0; width: 100%; outline: none; }
+
+        button#calc-btn { background: var(--gold); border: none; padding: 12px 35px; font-weight: bold; cursor: pointer; border-radius: 30px; letter-spacing: 2px; color: #000; margin-top: 10px; }
+
+        #loader { display: none; margin: 30px auto; font-size: 3.5rem; color: var(--gold); animation: phi-spin 2s linear infinite; }
+        @keyframes phi-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        #result-display { margin-top: 40px; display: none; border: 1px solid var(--border); padding: 30px; border-radius: 15px; background: var(--card); }
+        #timestamp { font-size: 4.5rem; font-weight: 100; margin: 5px 0; }
+
+        .progress-track { width: 100%; height: 4px; background: #222; border-radius: 2px; margin-bottom: 10px; position: relative; }
+        .phi-marker { position: absolute; left: 61.8%; top: -5px; width: 2px; height: 14px; background: var(--gold); }
+
+        .nav-hint { font-size: 0.7rem; color: #777; margin-top: 12px; font-style: italic; line-height: 1.4; }
+        .nav-hint small { display: block; margin-top: 5px; }
+
+        #recents { margin-top: 50px; text-align: left; border-top: 1px solid var(--border); padding-top: 20px; }
+        #recents h3 { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+        #history-list { list-style: none; padding: 0; }
+        .history-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; color: #888; }
+
+        .math-info { margin-top: 60px; padding: 30px; background: var(--card); border-radius: 15px; text-align: left; font-size: 0.85rem; line-height: 1.6; color: #888; }
+        .math-info h3 { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 15px; }
+        .formula { text-align: center; margin-top: 15px; color: var(--gold); }
+        .credits a { color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--gold); }
+
+        .app-link { display: inline-block; margin-top: 15px; color: var(--gold); text-decoration: none; border: 1px solid var(--gold); padding: 10px 20px; border-radius: 25px; font-size: 0.75rem; }
+    </style>
 </head>
 <body>
     <div class="header-tools">
@@ -32,9 +77,9 @@
         <div id="loader">Φ</div>
         
         <section id="result-display">
-            <span class="label">The Phi Peak</span>
+            <span style="font-size: 0.7rem; letter-spacing: 3px; color: #666; text-transform: uppercase;">The Phi Peak</span>
             <div id="timestamp" class="gold"></div>
-            <div id="track-meta"></div>
+            <div id="track-meta" style="margin-bottom: 15px; font-style: italic; opacity: 0.7;"></div>
             
             <div class="progress-track">
                 <div class="phi-marker"></div>
@@ -59,7 +104,7 @@
             
             <p>When applied to a linear timeline, the <strong>"Golden Section"</strong> occurs at the <strong>61.8% mark</strong>. In musicology, this point often aligns with the structural climax or a significant thematic shift.</p>
             <p class="formula">$$T_{peak} = T_{total} \times 0.618$$</p>
-            <hr>
+            <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
             <p class="credits">
                 <strong>Application & Styles:</strong> Designed and coded by Chris Bacavis.<br>
                 <strong>Inspiration:</strong> <a href="https://www.pbs.org/video/music-from-the-golden-ratio-and-fibonacci-sequence-afdd5k/" target="_blank">PBS: Music from the Golden Ratio</a>.
@@ -67,6 +112,86 @@
         </footer>
     </main>
 
-    <script src="script.js"></script>
+    <script>
+        window.onload = () => {
+            updateHistoryUI();
+            if (localStorage.getItem('theme') === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        };
+
+        const inputs = [document.getElementById('songInput'), document.getElementById('artistInput')];
+        inputs.forEach(el => {
+            el.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') getPhi();
+            });
+        });
+
+        function toggleTheme() {
+            const root = document.documentElement;
+            const current = root.getAttribute('data-theme');
+            const target = current === 'light' ? 'dark' : 'light';
+            root.setAttribute('data-theme', target);
+            localStorage.setItem('theme', target);
+        }
+
+        async function getPhi() {
+            const song = document.getElementById('songInput').value;
+            const artist = document.getElementById('artistInput').value;
+            if (!song) return;
+
+            const loader = document.getElementById('loader');
+            const result = document.getElementById('result-display');
+            loader.style.display = 'block';
+            result.style.display = 'none';
+
+            try {
+                const query = encodeURIComponent(`${song} ${artist}`);
+                const response = await fetch(`/api/calculate?song=${query}`);
+                if (!response.ok) throw new Error('Search failed');
+                
+                const data = await response.json();
+                console.log("Phi calculation successful for:", data.name);
+
+                loader.style.display = 'none';
+                result.style.display = 'block';
+                
+                document.getElementById('timestamp').innerText = data.phiMoment;
+                document.getElementById('guideTime').innerText = data.phiMoment;
+                document.getElementById('track-meta').innerText = `${data.name} — ${data.artist}`;
+                
+                document.getElementById('player-wrap').innerHTML = `
+                    <a href="https://open.spotify.com/track/${data.trackId}" target="_blank" class="app-link">Open in Spotify App</a>
+                    <iframe src="https://open.spotify.com/embed/track/${data.trackId}?utm_source=generator" 
+                        width="100%" height="352" frameborder="0" 
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                        style="border-radius:12px; margin-top:20px; border: none;"></iframe>`;
+                
+                storeHistory(data.name, data.phiMoment);
+            } catch (err) {
+                loader.style.display = 'none';
+                console.error(err);
+                alert("Couldn't find that track. Check your spelling and try again.");
+            }
+        }
+
+        function storeHistory(name, time) {
+            let history = JSON.parse(localStorage.getItem('phiPeaks')) || [];
+            history.unshift({name, time});
+            history = history.slice(0, 5);
+            localStorage.setItem('phiPeaks', JSON.stringify(history));
+            updateHistoryUI();
+        }
+
+        function updateHistoryUI() {
+            const list = document.getElementById('history-list');
+            const history = JSON.parse(localStorage.getItem('phiPeaks')) || [];
+            list.innerHTML = history.map(item => `
+                <li class="history-item">
+                    <span>${item.name}</span>
+                    <span class="gold">${item.time}</span>
+                </li>`).join('');
+        }
+    </script>
 </body>
 </html>
