@@ -65,11 +65,11 @@
         
         <div class="input-group">
             <label>Song Title</label>
-            <input type="text" id="songInput" placeholder="e.g. Eleanor Rigby">
+            <input type="text" id="songInput" placeholder="e.g. Starless">
         </div>
         <div class="input-group">
             <label>Artist</label>
-            <input type="text" id="artistInput" placeholder="e.g. The Beatles">
+            <input type="text" id="artistInput" placeholder="e.g. King Crimson">
         </div>
 
         <button id="calc-btn" onclick="getPhi()">CALCULATE</button>
@@ -85,8 +85,16 @@
 
         <div class="math-footer">
             <h3>The Science of the Peak</h3>
-            <p>The <strong>Golden Ratio ($\Phi \approx 1.618$)</strong> describes a perfect proportional balance. In music, the "Golden Section" occurs at the <strong>61.8%</strong> mark.</p>
-            <p style="text-align: center; margin-top: 15px;" class="gold">$$T_{peak} = T_{total} \times 0.618$$</p>
+            <p>
+                The <strong>Golden Ratio</strong> (represented by the symbol Phi or Φ</strong>) is a unique mathematical proportion found in nature and art. It happens when you divide a line into two parts so that the longer part is roughly <strong>1.6 times</strong> the length of the shorter part.
+            </p>
+            
+            <p>
+                When applied to a linear timeline, the <strong>"Golden Section"</strong> occurs at the <strong>61.8% mark</strong>. In musicology, this point often aligns with the structural climax or a significant thematic shift.
+            </p>
+            <p style="text-align: center; margin-top: 15px;" class="gold">
+                $$T_{peak} = T_{total} \times 0.618$$
+            </p>
             <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
             <p style="font-size: 0.75rem; opacity: 0.8; line-height: 1.4;">
                 <strong>Application & Styles:</strong> Designed and coded by Chris Bacavis.<br>
@@ -102,13 +110,12 @@
             document.documentElement.setAttribute('data-theme', target);
             localStorage.setItem('theme', target);
         }
+        if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
 
-        // --- NEW: ENTER KEY LOGIC ---
+        // Enter Key Logic
         [document.getElementById('songInput'), document.getElementById('artistInput')].forEach(input => {
             input.addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') {
-                    getPhi();
-                }
+                if (e.key === 'Enter') { getPhi(); }
             });
         });
 
