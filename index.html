@@ -29,7 +29,7 @@
 <body>
     <div class="container">
         <h1 class="gold">PHIPOINT</h1>
-        <p style="color: #666; margin-bottom: 40px;">Find the mathematical pivot of any track.</p>
+        <p style="color: #666; margin-bottom: 40px;">Find the mathematical "peak" of any track, in accordance with the Golden Ratio Φ.</p>
         
         <input type="text" id="songInput" placeholder="Song name and artist...">
         <br>
@@ -55,7 +55,11 @@
     <script>
         // Load history when page opens
         window.onload = displayHistory;
-
+document.getElementById('songInput').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+        getPhi();
+    }
+});
         async function getPhi() {
             const song = document.getElementById('songInput').value;
             if (!song) return;
