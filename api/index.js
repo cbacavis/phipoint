@@ -35,5 +35,8 @@ app.get('/api/calculate', async (req, res) => {
         res.status(500).json({ error: "Check your Spotify Keys in Vercel Settings" });
     }
 });
-
+const path = require('path');
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../index.html'));
+});
 module.exports = app;
