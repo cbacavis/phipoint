@@ -1,4 +1,10 @@
-:root { --bg: #0A0A0A; --text: #f0f0f0; --gold: #D4AF37; --card: #111; --border: #333; }
+:root {
+    --bg: #0A0A0A;
+    --text: #f0f0f0;
+    --gold: #D4AF37;
+    --card: #111;
+    --border: #333;
+}
 [data-theme="light"] { --bg: #f4f4f4; --text: #1a1a1a; --gold: #b8860b; --card: #ffffff; --border: #ddd; }
 
 body { background-color: var(--bg); color: var(--text); font-family: 'Helvetica Neue', Arial, sans-serif; text-align: center; margin: 0; transition: 0.3s; padding-top: 40px; }
