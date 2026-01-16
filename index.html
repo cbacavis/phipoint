@@ -5,48 +5,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PhiPoint | The Geometry of Song</title>
     <style>
-        body { background: #0A0A0A; color: #f0f0f0; font-family: 'Helvetica Neue', sans-serif; text-align: center; padding-top: 80px; }
+        body { background: #0A0A0A; color: #f0f0f0; font-family: 'Helvetica Neue', sans-serif; text-align: center; padding-top: 60px; }
         .gold { color: #D4AF37; }
-        h1 { letter-spacing: 5px; font-weight: 200; font-size: 3rem; }
+        h1 { letter-spacing: 5px; font-weight: 200; font-size: 3rem; margin-bottom: 10px; }
         .container { max-width: 500px; margin: 0 auto; padding: 20px; }
-        input { background: none; border: none; border-bottom: 2px solid #D4AF37; color: white; font-size: 1.2rem; padding: 10px; width: 80%; outline: none; transition: 0.3s; }
+        input { background: none; border: none; border-bottom: 2px solid #D4AF37; color: white; font-size: 1.2rem; padding: 10px; width: 80%; outline: none; transition: 0.3s; margin-bottom: 20px; }
         input:focus { border-bottom: 2px solid #fff; }
-        button { background: #D4AF37; border: none; padding: 12px 30px; font-weight: bold; cursor: pointer; border-radius: 30px; margin-top: 30px; letter-spacing: 2px; }
+        button { background: #D4AF37; border: none; padding: 12px 30px; font-weight: bold; cursor: pointer; border-radius: 30px; letter-spacing: 2px; transition: 0.3s; }
         button:hover { background: #fff; color: #000; }
-        #result { margin-top: 60px; display: none; border: 1px solid #333; padding: 30px; border-radius: 15px; }
+        
+        #result { margin-top: 40px; display: none; border: 1px solid #333; padding: 30px; border-radius: 15px; background: #111; }
         #timestamp { font-size: 4rem; font-weight: 100; margin: 10px 0; }
-        .label { text-transform: uppercase; font-size: 0.8rem; letter-spacing: 3px; color: #666; }
+        .label { text-transform: uppercase; font-size: 0.7rem; letter-spacing: 3px; color: #666; margin-bottom: 10px; }
+        
+        #playerContainer { margin-top: 25px; min-height: 80px; }
+        .copy-btn { background: #222; color: #D4AF37; font-size: 0.6rem; padding: 8px 15px; margin-top: 15px; border: 1px solid #D4AF37; }
+        
+        #historySection { margin-top: 50px; text-align: left; border-top: 1px solid #222; padding-top: 20px; }
+        #historyList { list-style: none; padding: 0; }
+        .history-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1a1a1a; font-size: 0.85rem; color: #888; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 class="gold">PHIPOINT</h1>
-        <p>Identify the mathematical "peak moment" of any track.</p>
+        <p style="color: #666; margin-bottom: 40px;">Find the mathematical pivot of any track.</p>
         
-        <input type="text" id="songInput" placeholder="Enter song name and artist...">
+        <input type="text" id="songInput" placeholder="Song name and artist...">
         <br>
         <button onclick="getPhi()">CALCULATE</button>
 
         <div id="result">
             <div class="label">The Phi Moment</div>
             <div class="gold" id="timestamp"></div>
-            <div id="trackInfo" style="color: #999;"></div>
+            <div id="trackInfo" style="color: #999; font-style: italic; margin-bottom: 10px;"></div>
+            
+            <button class="copy-btn" onclick="copyResult()">COPY TIMESTAMP</button>
+            
+            <div id="playerContainer"></div>
+        </div>
+
+        <div id="historySection">
+            <div class="label">Recent Searches</div>
+            <ul id="historyList"></ul>
+            <button onclick="clearHistory()" style="background: none; color: #444; font-size: 0.6rem; border: none; padding: 0; cursor: pointer;">Clear History</button>
         </div>
     </div>
 
     <script>
+        // Load history when page opens
+        window.onload = displayHistory;
+
         async function getPhi() {
             const song = document.getElementById('songInput').value;
             if (!song) return;
-            const res = await fetch(`/api/calculate?song=${encodeURIComponent(song)}`);
-            const data = await res.json();
-            if (data.error) {
-                alert(data.error);
-            } else {
-                document.getElementById('result').style.display = 'block';
-                document.getElementById('timestamp').innerText = data.phiMoment;
-                document.getElementById('trackInfo').innerText = `${data.name} — ${data.artist}`;
+            
+            const btn = document.querySelector('button');
+            btn.innerText = "SEARCHING...";
+
+            try {
+                const res = await fetch(`/api/calculate?song=${encodeURIComponent(song)}`);
+                const data = await res.json();
+                
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    document.getElementById('result').style.display = 'block';
+                    document.getElementById('timestamp').innerText = data.phiMoment;
+                    document.getElementById('trackInfo').innerText = `${data.name} — ${data.artist}`;
+                    
+                    // Update Player
+                    document.getElementById('playerContainer').innerHTML = `
+                        <iframe src="https://open.spotify.com/embed/track/${data.trackId}" 
+                                width="100%" height="80" frameborder="0" 
+                                allowtransparency="true" allow="encrypted-media"></iframe>`;
+                    
+                    addToHistory(data.name, data.phiMoment);
+                }
+            } catch (err) {
+                alert("Connection failed. Check Vercel logs.");
+            } finally {
+                btn.innerText = "CALCULATE";
             }
+        }
+
+        function copyResult() {
+            const time = document.getElementById('timestamp').innerText;
+            const info = document.getElementById('trackInfo').innerText;
+            const text = `The Phi Moment for ${info} is at ${time}. Found via PhiPoint.`;
+            navigator.clipboard.writeText(text);
+            alert("Copied!");
+        }
+
+        function addToHistory(name, time) {
+            let history = JSON.parse(localStorage.getItem('phiHistory')) || [];
+            history.unshift({ name, time });
+            if (history.length > 5) history.pop();
+            localStorage.setItem('phiHistory', JSON.stringify(history));
+            displayHistory();
+        }
+
+        function displayHistory() {
+            const list = document.getElementById('historyList');
+            const history = JSON.parse(localStorage.getItem('phiHistory')) || [];
+            list.innerHTML = history.map(item => `
+                <li class="history-item">
+                    <span>${item.name}</span>
+                    <span class="gold">${item.time}</span>
+                </li>
+            `).join('');
+        }
+
+        function clearHistory() {
+            localStorage.removeItem('phiHistory');
+            displayHistory();
         }
     </script>
 </body>
