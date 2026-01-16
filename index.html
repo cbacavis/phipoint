@@ -60,6 +60,8 @@
         .math-footer { margin-top: 60px; padding: 30px; background: var(--card); border-radius: 15px; text-align: left; font-size: 0.85rem; line-height: 1.6; color: #888; }
         .math-footer h3 { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 15px; }
     </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
     <div class="header-tools">
@@ -108,12 +110,18 @@
             <ul id="historyList"></ul>
         </div>
 
-        <div class="math-footer">
-            <h3>The Science of the Peak</h3>
-            <p>In mathematics, the <strong>Golden Ratio ($\Phi$)</strong> is approximately <strong>1.618</strong>. When applied to a timeline, the "Golden Section" occurs at the <strong>$61.8\%$</strong> mark.</p>
-            <p>This app calculates the climax of a track using the formula: $T_{peak} = T_{total} \times 0.618$.</p>
-        </div>
-    </div>
+<div class="math-footer">
+    <h3>The Science of the Peak</h3>
+    <p>
+        In mathematics, two quantities are in the <strong>Golden Ratio ($\Phi$)</strong> if their ratio is the same as the ratio of their sum to the larger of the two quantities. This constant is approximately <strong>1.618</strong>.
+    </p>
+    <p>
+        When applied to a linear timeline (like a song), the "Golden Section" occurs at the <strong>61.8%</strong> mark. In musicology and structural analysis, this point often aligns with the emotional climax or a significant thematic shift.
+    </p>
+    <p style="font-style: italic; margin-top: 10px; font-size: 0.9rem;" class="gold">
+        $$T_{peak} = T_{total} \times 0.618$$
+    </p>
+</div>
 
     <script>
         window.onload = () => {
