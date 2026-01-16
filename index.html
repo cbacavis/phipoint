@@ -3,32 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PhiPoint | The Geometry of Song</title>
+    <title>PhiPoint.io | The Geometry of Song</title>
     
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <style>
-        :root {
-            --bg: #0A0A0A;
-            --text: #f0f0f0;
-            --gold: #D4AF37;
-            --card: #111;
-            --border: #333;
-        }
-        [data-theme="light"] {
-            --bg: #f4f4f4;
-            --text: #1a1a1a;
-            --gold: #b8860b;
-            --card: #ffffff;
-            --border: #ddd;
-        }
+        :root { --bg: #0A0A0A; --text: #f0f0f0; --gold: #D4AF37; --card: #111; --border: #333; }
+        [data-theme="light"] { --bg: #f4f4f4; --text: #1a1a1a; --gold: #b8860b; --card: #ffffff; --border: #ddd; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Helvetica Neue', Arial, sans-serif; text-align: center; padding-top: 40px; transition: 0.3s; margin: 0; }
         .container { max-width: 500px; margin: 0 auto; padding: 20px; }
         .gold { color: var(--gold); }
         .header-tools { position: absolute; top: 20px; right: 20px; }
         .theme-switch { cursor: pointer; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; border: 1px solid var(--border); padding: 5px 10px; border-radius: 20px; }
-        #phi-loader { display: none; margin: 30px auto; font-size: 3.5rem; color: var(--gold); width: 60px; height: 60px; line-height: 60px; animation: phi-spin 2s linear infinite; }
+        #phi-loader { display: none; margin: 30px auto; font-size: 3.5rem; color: var(--gold); animation: phi-spin 2s linear infinite; }
         @keyframes phi-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .input-group { margin-bottom: 20px; text-align: left; width: 90%; margin-left: auto; margin-right: auto; }
         label { display: block; font-size: 0.6rem; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
@@ -36,45 +24,49 @@
         button#calc-btn { background: var(--gold); border: none; padding: 12px 35px; font-weight: bold; cursor: pointer; border-radius: 30px; letter-spacing: 2px; color: #000; margin-top: 10px; }
         #result { margin-top: 40px; display: none; border: 1px solid var(--border); padding: 30px; border-radius: 15px; background: var(--card); }
         #timestamp { font-size: 4.5rem; font-weight: 100; margin: 5px 0; }
+        
+        /* Recents Styling */
+        #historySection { margin-top: 50px; text-align: left; border-top: 1px solid var(--border); padding-top: 20px; }
+        #historyList { list-style: none; padding: 0; }
+        .history-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; color: #888; }
+
         .math-footer { margin-top: 60px; padding: 30px; background: var(--card); border-radius: 15px; text-align: left; font-size: 0.85rem; line-height: 1.6; color: #888; }
         .math-footer h3 { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 15px; }
     </style>
 </head>
 <body>
-    <div class="header-tools">
-        <div class="theme-switch" onclick="toggleTheme()">🌓 Theme</div>
-    </div>
+    <div class="header-tools"><div class="theme-switch" onclick="toggleTheme()">🌓 Theme</div></div>
     <div class="container">
-        <h1 class="gold" style="letter-spacing: 8px; font-weight: 200; font-size: 3rem; margin-bottom: 0;">PHIPOINT</h1>
+        <h1 class="gold" style="letter-spacing: 8px; font-weight: 200; font-size: 3rem; margin-bottom: 0;">PHIPOINT.IO</h1>
         <p style="color: #666; margin-bottom: 40px; font-size: 0.9rem;">The Geometry of Song.</p>
         <div class="input-group"><label>Song Title</label><input type="text" id="songInput" placeholder="e.g. Starless"></div>
         <div class="input-group"><label>Artist</label><input type="text" id="artistInput" placeholder="e.g. King Crimson"></div>
         <button id="calc-btn" onclick="getPhi()">CALCULATE</button>
         <div id="phi-loader">Φ</div>
+        
         <div id="result">
             <div style="font-size: 0.7rem; letter-spacing: 3px; color: #666; text-transform: uppercase;">The Phi Peak</div>
             <div id="timestamp" class="gold"></div>
             <div id="trackInfo" style="margin-bottom: 15px; font-style: italic; opacity: 0.7;"></div>
-            
             <div style="width: 100%; height: 4px; background: #222; border-radius: 2px; margin-bottom: 10px; position: relative;">
                 <div style="position: absolute; left: 61.8%; top: -5px; width: 2px; height: 14px; background: var(--gold);"></div>
             </div>
-
             <div id="playerContainer"></div>
-            
             <p id="navTip" style="font-size: 0.7rem; color: #777; margin-top: 12px; font-style: italic; line-height: 1.4;">
-                Tip: Manually drag the player to about <span class="gold">5 seconds before</span> <span class="gold" id="guideTime"></span> to hear the build-up to the peak.
+                Tip: Manually drag the player to about <span class="gold">5 seconds before</span> <span class="gold" id="guideTime"></span> to hear the build-up.
             </p>
         </div>
+
+        <div id="historySection">
+            <p class="gold" style="font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;">Recent Peaks</p>
+            <ul id="historyList"></ul>
+        </div>
+
         <div class="math-footer">
             <h3>The Science of the Peak</h3>
-            <p>
-                The <strong>Golden Ratio</strong> (represented by the symbol <strong>Phi or Φ</strong>) is a unique mathematical proportion found in nature and art. It happens when you divide a line into two parts so that the longer part is roughly <strong>1.6 times</strong> the length of the shorter part.
-            </p>
+            <p>The <strong>Golden Ratio</strong> (represented by the symbol <strong>Phi or Φ</strong>) is a unique mathematical proportion found in nature and art. It happens when you divide a line into two parts so that the longer part is roughly <strong>1.6 times</strong> the length of the shorter part.</p>
             
-            <p>
-                When applied to a linear timeline, the <strong>"Golden Section"</strong> occurs at the <strong>61.8% mark</strong>. In musicology, this point often aligns with the structural climax or a significant thematic shift.
-            </p>
+            <p>When applied to a linear timeline, the <strong>"Golden Section"</strong> occurs at the <strong>61.8% mark</strong>. In musicology, this point often aligns with the structural climax or a significant thematic shift.</p>
             <p style="text-align: center; margin-top: 15px;" class="gold">$$T_{peak} = T_{total} \times 0.618$$</p>
             <hr style="border: 0; border-top: 1px solid var(--border); margin: 20px 0;">
             <p style="font-size: 0.75rem; opacity: 0.8; line-height: 1.4;">
@@ -84,49 +76,56 @@
         </div>
     </div>
     <script>
+        window.onload = () => {
+            renderHistory();
+            if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        };
+
         function toggleTheme() {
             const current = document.documentElement.getAttribute('data-theme');
             const target = current === 'light' ? 'dark' : 'light';
             document.documentElement.setAttribute('data-theme', target);
             localStorage.setItem('theme', target);
         }
-        if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light');
 
         [document.getElementById('songInput'), document.getElementById('artistInput')].forEach(input => {
             input.addEventListener('keypress', function (e) { if (e.key === 'Enter') { getPhi(); } });
         });
 
         async function getPhi() {
-    const song = document.getElementById('songInput').value;
-    const artist = document.getElementById('artistInput').value;
-    if (!song) return;
+            const song = document.getElementById('songInput').value;
+            const artist = document.getElementById('artistInput').value;
+            if (!song) return;
+            document.getElementById('phi-loader').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            try {
+                const res = await fetch(`/api/calculate?song=${encodeURIComponent(song + ' ' + artist)}`);
+                const data = await res.json();
+                document.getElementById('phi-loader').style.display = 'none';
+                if (data.error) return alert(data.error);
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('timestamp').innerText = data.phiMoment;
+                document.getElementById('guideTime').innerText = data.phiMoment;
+                document.getElementById('trackInfo').innerText = `${data.name} — ${data.artist}`;
+                document.getElementById('playerContainer').innerHTML = `<iframe src="https://open.spotify.com/embed/track/${data.trackId}" width="100%" height="352" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" style="border-radius:12px; margin-top:20px; border: none;"></iframe>`;
+                
+                saveToHistory(data.name, data.phiMoment);
+            } catch (e) { document.getElementById('phi-loader').style.display = 'none'; alert("Connection error."); }
+        }
 
-    document.getElementById('phi-loader').style.display = 'block';
-    document.getElementById('result').style.display = 'none';
+        function saveToHistory(name, time) {
+            let history = JSON.parse(localStorage.getItem('phiPeaks')) || [];
+            history.unshift({name, time});
+            history = history.slice(0, 5); // Keep last 5
+            localStorage.setItem('phiPeaks', JSON.stringify(history));
+            renderHistory();
+        }
 
-    try {
-        const res = await fetch(`/api/calculate?song=${encodeURIComponent(song + ' ' + artist)}`);
-        const data = await res.json();
-        
-        document.getElementById('phi-loader').style.display = 'none';
-        if (data.error) return alert(data.error);
-
-        document.getElementById('result').style.display = 'block';
-        document.getElementById('timestamp').innerText = data.phiMoment;
-        document.getElementById('guideTime').innerText = data.phiMoment;
-        document.getElementById('trackInfo').innerText = `${data.name} — ${data.artist}`;
-        
-        // Updated: Increased height to 352 for a more immersive "App" feel
-        document.getElementById('playerContainer').innerHTML = `
-            <iframe src="https://open.spotify.com/embed/track/${data.trackId}" 
-                    width="100%" height="352" frameborder="0" 
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                    style="border-radius:12px; margin-top:20px; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.5);"></iframe>`;
-    } catch (e) {
-        document.getElementById('phi-loader').style.display = 'none';
-        alert("Connection error.");
-    }
-}
+        function renderHistory() {
+            const list = document.getElementById('historyList');
+            const history = JSON.parse(localStorage.getItem('phiPeaks')) || [];
+            list.innerHTML = history.map(item => `<li class="history-item"><span>${item.name}</span><span class="gold">${item.time}</span></li>`).join('');
+        }
     </script>
 </body>
 </html>
