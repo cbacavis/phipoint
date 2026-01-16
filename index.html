@@ -25,13 +25,15 @@
         #result { margin-top: 40px; display: none; border: 1px solid var(--border); padding: 30px; border-radius: 15px; background: var(--card); }
         #timestamp { font-size: 4.5rem; font-weight: 100; margin: 5px 0; }
         
-        /* Recents Styling */
         #historySection { margin-top: 50px; text-align: left; border-top: 1px solid var(--border); padding-top: 20px; }
         #historyList { list-style: none; padding: 0; }
         .history-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; color: #888; }
 
         .math-footer { margin-top: 60px; padding: 30px; background: var(--card); border-radius: 15px; text-align: left; font-size: 0.85rem; line-height: 1.6; color: #888; }
         .math-footer h3 { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 15px; }
+        
+        .app-link { display: inline-block; margin-top: 15px; color: var(--gold); text-decoration: none; border: 1px solid var(--gold); padding: 10px 20px; border-radius: 25px; font-size: 0.75rem; transition: 0.2s; }
+        .app-link:hover { background: var(--gold); color: #000; }
     </style>
 </head>
 <body>
@@ -39,8 +41,8 @@
     <div class="container">
         <h1 class="gold" style="letter-spacing: 8px; font-weight: 200; font-size: 3rem; margin-bottom: 0;">PHIPOINT</h1>
         <p style="color: #666; margin-bottom: 40px; font-size: 0.9rem;">The Geometry of Song.</p>
-        <div class="input-group"><label>Song Title</label><input type="text" id="songInput" placeholder="e.g. Starless"></div>
-        <div class="input-group"><label>Artist</label><input type="text" id="artistInput" placeholder="e.g. King Crimson"></div>
+        <div class="input-group"><label>Song Title</label><input type="text" id="songInput" placeholder="e.g. Echoes"></div>
+        <div class="input-group"><label>Artist</label><input type="text" id="artistInput" placeholder="e.g. Pink Floyd"></div>
         <button id="calc-btn" onclick="getPhi()">CALCULATE</button>
         <div id="phi-loader">Φ</div>
         
@@ -53,7 +55,8 @@
             </div>
             <div id="playerContainer"></div>
             <p id="navTip" style="font-size: 0.7rem; color: #777; margin-top: 12px; font-style: italic; line-height: 1.4;">
-                Tip: Manually drag the player to about <span class="gold">5 seconds before</span> <span class="gold" id="guideTime"></span> to hear the build-up.
+                Tip: Manually drag the player to about <span class="gold">5 seconds before</span> <span class="gold" id="guideTime"></span>. 
+                <span id="mobileNote" style="display:block; margin-top:5px;">If the slider is hidden on mobile, use the button above to open the full player.</span>
             </p>
         </div>
 
@@ -107,7 +110,11 @@
                 document.getElementById('timestamp').innerText = data.phiMoment;
                 document.getElementById('guideTime').innerText = data.phiMoment;
                 document.getElementById('trackInfo').innerText = `${data.name} — ${data.artist}`;
-                document.getElementById('playerContainer').innerHTML = `<iframe src="https://open.spotify.com/embed/track/${data.trackId}" width="100%" height="352" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" style="border-radius:12px; margin-top:20px; border: none;"></iframe>`;
+                
+                // Enhanced Player with Mobile Fallback Button
+                document.getElementById('playerContainer').innerHTML = `
+                    <a href="https://open.spotify.com/track/${data.trackId}" target="_blank" class="app-link">Open in Spotify App</a>
+                    <iframe src="https://open.spotify.com/embed/track/${data.trackId}?utm_source=generator" width="100%" height="352" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" style="border-radius:12px; margin-top:20px; border: none;"></iframe>`;
                 
                 saveToHistory(data.name, data.phiMoment);
             } catch (e) { document.getElementById('phi-loader').style.display = 'none'; alert("Connection error."); }
@@ -116,7 +123,7 @@
         function saveToHistory(name, time) {
             let history = JSON.parse(localStorage.getItem('phiPeaks')) || [];
             history.unshift({name, time});
-            history = history.slice(0, 5); // Keep last 5
+            history = history.slice(0, 5);
             localStorage.setItem('phiPeaks', JSON.stringify(history));
             renderHistory();
         }
