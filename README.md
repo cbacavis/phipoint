@@ -52,4 +52,5 @@ The core calculator is functional. Moving forward, I am interested in expanding 
 ---
 
 ### Author
-**CHRIS BACAVIS** *High School English Teacher | Emerging Developer | Colorado Springs, CO*
+**CHRIS BACAVIS** 
+*Educator | Strategic Communicator | Creative Consultant | Emerging Developer | Colorado Springs, CO*
